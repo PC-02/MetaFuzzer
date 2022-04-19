@@ -1,8 +1,7 @@
 gradient_info
 gradient_info_p
 *.h5
+*_seeds
 bitmaps
 crashes
-splice_seeds
-vari_seeds
 compile.sh

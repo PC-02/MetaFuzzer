@@ -2,7 +2,7 @@
 
 Fuzzer that allows for using multiple machine learning techniques during the fuzzing process.
 
-## Installation
+## System Installation
 
 Below are the dependencies
 
@@ -13,4 +13,11 @@ sudo apt-get install -y lld-11 llvm-11 llvm-11-dev clang-11 || sudo apt-get inst
 sudo apt-get install -y gcc-$(gcc --version|head -n1|sed 's/\..*//'|sed 's/.* //')-plugin-dev libstdc++-$(gcc --version|head -n1|sed 's/\..*//'|sed 's/.* //')-dev
 sudo apt-get install -y ninja-build 
 sudo apt-get install -y tmux
+```
+
+Below are the python dependencies
+
+```
+python -m pip install --upgrade pip
+python -m pip install -r requirements.py
 ```
