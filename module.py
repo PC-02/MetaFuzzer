@@ -19,7 +19,7 @@ MAX_FILE_SIZE=10000
 MAX_BITMAP_SIZE=0
 SPLIT_RATIO=0
 HOST = '127.0.0.1'
-PORT = 12012
+PORT = 12014
 
 round_cnt=0
 
@@ -76,7 +76,7 @@ def Create_Bitmap(bitmaps_created):
     
     for file in file_list:
         #print(file)
-        out = call(['../afl-showmap', '-q', '-e', '-o', '/dev/stdout', '-m', '512', '-t', '500'] + [target_program_path,'-a'] + [file])
+        out = call(['./afl-showmap', '-q', '-e', '-o', '/dev/stdout', '-m', '512', '-t', '500'] + [target_program_path,'-a'] + [file])
         tmpEdgeList = []
 
         if i  % 100 == 0:
@@ -221,7 +221,7 @@ def Train_Generator(batch_size):
             # load full batch
             if (i + batch_size) > SPLIT_RATIO:
                 x, y = Generate_Training_Data(i, SPLIT_RATIO)
-                print(x, y)
+                # print(x, y)
                 x = x.astype('float32') 
                 
             # load remaining data for last batch

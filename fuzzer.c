@@ -535,7 +535,7 @@ void setup_dirs_fds(void) {
   char* tmp;
   int fd;
 
-  printf("Setting up output directories...");
+  fprintf(stderr, "Setting up output directories...\n");
 
 
   if (mkdir(out_dir, 0700)) {
@@ -808,7 +808,7 @@ static void get_core_count(void) {
 
 #endif /* __APPLE__ || __FreeBSD__ || __OpenBSD__ */
 
-    printf("You have %u CPU core%s and %u runnable tasks (utilization: %0.0f%%).\n",
+    fprintf(stderr, "You have %u CPU core%s and %u runnable tasks (utilization: %0.0f%%).\n",
         cpu_core_count, cpu_core_count > 1 ? "s" : "",
         cur_runnable, cur_runnable * 100.0 / cpu_core_count);
 
@@ -860,7 +860,7 @@ static void bind_to_free_cpu(void) {
 
   }
 
-  printf("Checking CPU core loadout...\n");
+  fprintf(stderr, "Checking CPU core loadout...\n");
 
   /* Introduce some jitter, in case multiple AFL tasks are doing the same
      thing at the same time... */
@@ -922,7 +922,7 @@ static void bind_to_free_cpu(void) {
 
   }
 
-  printf("Found a free CPU core, binding to #%u.\n", i);
+  fprintf(stderr, "Found a free CPU core, binding to #%u.\n", i);
 
   cpu_aff = i;
 
@@ -1083,7 +1083,7 @@ static void check_cpu_governor(void) {
   f = fopen("/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor", "r");
   if (!f) return;
 
-  printf("Checking CPU scaling governor...\n");
+  fprintf(stderr, "Checking CPU scaling governor...\n");
 
   if (!fgets(tmp, 128, f)) perror("fgets() failed");
 
@@ -2163,7 +2163,7 @@ void main(int argc, char*argv[]){
     
     copy_seeds(in_dir, out_dir, len);
 
-    printf("Run Python module & hit [Enter]...");
+    fprintf(stderr, "Run Python module & hit [Enter]...\n");
     int i;
     scanf("%d",&i);
 
