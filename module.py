@@ -638,6 +638,7 @@ def Start_Server():
     model_type = f"{sys.argv[3]}"
     trained = sys.argv[4] == "True"
     created = sys.argv[5] == "True"
+    PORT = int(sys.argv[6])
 
     dir_path = f"{target_dir_path}id*"
     file_list = glob.glob(dir_path)

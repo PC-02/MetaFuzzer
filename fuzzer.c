@@ -31,7 +31,7 @@
 /* Environment variable used to pass SHM ID to the called program. */
 #define SHM_ENV_VAR "__AFL_SHM_ID"
 /* Local port to communicate with python module. */
-#define PORT                12014
+int PORT = 12014;
 /* Maximum line length passed from GCC to 'as' and used for parsing configuration files. */
 #define MAX_LINE            8192
 /* Designated file descriptors for forkserver commands (the application will use FORKSRV_FD and FORKSRV_FD + 1). */
@@ -2109,7 +2109,7 @@ void main(int argc, char*argv[]){
     int opt;
 
     // function to handle args by looping through each argument provided
-    while ((opt = getopt(argc, argv, "+i:o:l:")) > 0)
+    while ((opt = getopt(argc, argv, "+i:o:p:l:")) > 0)
 
     switch (opt) {
 
@@ -2124,6 +2124,11 @@ void main(int argc, char*argv[]){
 
         if (out_dir) perror("Multiple -o options not supported");
         out_dir = optarg;
+        break;
+
+      case 'p': /* output dir */
+        sscanf(optarg,"%d",&PORT);
+        fprintf(stderr, "Using PORT: %d\n", PORT);
         break;
       
       case 'l': /* file len */
@@ -2164,8 +2169,7 @@ void main(int argc, char*argv[]){
     copy_seeds(in_dir, out_dir, len);
 
     fprintf(stderr, "Run Python module & hit [Enter]...\n");
-    int i;
-    scanf("%d",&i);
+    fgetc(stdin);
 
     init_forkserver(argv+optind);
    
