@@ -32,12 +32,17 @@ gcc -funroll-loops ./fuzzer.c -o fuzzer
 To run the fuzzing process,
 
 ```
-./main.sh
+./main.sh [program-name] [model-type]
+
+./main.sh size NN
+./main.sh size LSTM
 ```
 
 To run the comparison process,
 ```
-./compare.sh
+./compare.sh [program-name]
+
+./compare.sh size
 ```
 
 
