@@ -1,6 +1,6 @@
 # MetaFuzzer
 
-Fuzzer that allows for using multiple machine learning techniques during the fuzzing process.
+Fuzzer that allows a user to select between various machine learning techniques to use during the fuzzing process. Also allows the user to compare the machine learning techniques between each other.
 
 ## System Installation
 
@@ -21,6 +21,25 @@ Below are the python dependencies
 python -m pip install --upgrade pip
 python -m pip install -r requirements.py
 ```
+
+To compile the fuzzer run,
+
+```
+gcc -funroll-loops ./fuzzer.c -o fuzzer
+
+```
+
+To run the fuzzing process,
+
+```
+./main.sh
+```
+
+To run the comparison process,
+```
+./compare.sh
+```
+
 
 During the fuzzing process,
 
