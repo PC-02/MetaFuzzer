@@ -598,9 +598,9 @@ def Gen_Mutate_Info(model, edgeNum, train, modelType):
 
                 # write gradient index data along with ones and file names
                 f.write(
-                    ",".join(sortedGradIndex) + '|'
-                    + ",".join(randOnes) + '|' + randSeeds + '\n'
-                       )
+                    ",".join(sortedGradIndex) + '|' +
+                    ",".join(randOnes) + '|' + randSeeds + '\n'
+                )
 
 
 def Gen_Gradient(first, trained, modelType, bitmaps):
