@@ -21,3 +21,11 @@ Below are the python dependencies
 python -m pip install --upgrade pip
 python -m pip install -r requirements.py
 ```
+
+During the fuzzing process,
+
+```
+CTRL + C # Stops the program
+CTRL + D # Closes the split terminal
+CTRL + B + [Arrow Key] # Move to terminal in direction of arrow key
+```
