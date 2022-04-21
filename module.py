@@ -554,12 +554,12 @@ def Gen_Mutate_Info(model, edgeNum, train, modelType):
     outputIndices = np.random.choice(4096, edgeNum)
     layerList = [(layer.name, layer) for layer in model.layers]
 
-    # if modelType == "LSTM":
-    #     retrainVal = 50
-    # else:
-    #     retrainVal = 100
+    if modelType == "LSTM":
+        gradName = 'gradient_info_p_lstm'
+    else:
+        gradName = 'gradient_info_p_nn'
 
-    with open('gradient_info_p', 'w') as f:
+    with open(gradName, 'w') as f:
         for idx in range(edgeNum):
             print(f"\n***\n Edge Num: {idx} \n***\n")
 

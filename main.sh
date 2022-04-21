@@ -42,7 +42,7 @@ tmux split-window -h
 # Start fuzzer
 tmux select-pane -t 0
 tmux send "printf '****** \n\n $type Fuzzer \n\n******\n'" ENTER;
-tmux send "./fuzzer -i $1_in/ -o $dir/ -p 12000 -l 10000 ./$1 @@" ENTER;
+tmux send "./fuzzer -i $1_in/ -o $dir/ -p 12000 -m $type -l 10000 ./$1 @@" ENTER;
 
 # Start module
 tmux select-pane -t 1

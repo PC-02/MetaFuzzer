@@ -124,6 +124,7 @@ static int forksrv_pid,                 /* PID of the fork server           */
 char *in_dir,                           /* Input directory with test cases  */
      *out_file,                         /* File to fuzz, if any             */
      *out_dir;                          /* Working & output directory       */
+     *model_type;                       /* model type */
 char virgin_bits[MAP_SIZE];             /* Regions yet untouched by fuzzing */
 static int mut_cnt = 0;                 /* Total mutation counter           */
 char *out_buf, *out_buf1, *out_buf2, *out_buf3;
@@ -1897,10 +1898,20 @@ void copy_seeds(char * in_dir, char * out_dir, int f_len){
 }
 
 /* parse the gradient to guide fuzzing */
-void fuzz_lop(char * grad_file, int sock){
-    fprintf(stderr, "\n\Starting Fuzzing Process...\n\n");
+void fuzz_lop(char * grad_file, int sock, char* model_type){
+    fprintf(stderr, "\nStarting Fuzzing Process...\n\n");
     dry_run("./splice_seeds/", 1); 
-    copy_file("gradient_info_p", grad_file);
+    
+
+    char* grad_file_name;
+
+    if(strcmp(model_type,"NN") == 0)
+      grad_file_name = "./gradient_info_p_nn";
+    else
+      grad_file_name = "./gradient_info_p_lstm";
+    
+    
+    copy_file(grad_file_name, grad_file);
     
     FILE *stream = fopen(grad_file, "r");
     fprintf(stderr, "Got Gradient\n");
@@ -1922,10 +1933,10 @@ void fuzz_lop(char * grad_file, int sock){
     size_t llen = 0;
     ssize_t nread = NULL;
     int line_cnt = 0;
-    int retrain_interval = 1000;
+    int retrain_interval = 250;
 
     if(round_cnt == 0)
-        retrain_interval = 750;
+        retrain_interval = 200;
 
     // fprintf(stderr,"here\n");
     line[0] = '\0';
@@ -2024,7 +2035,7 @@ void fuzz_lop(char * grad_file, int sock){
 }
 
 /* connect to python NN module, then read the gradient file to guide fuzzing */
-void start_fuzz(int f_len){
+void start_fuzz(int f_len, char* model_type){
     
     /* connect to python module */    
     struct sockaddr_in address;
@@ -2065,14 +2076,21 @@ void start_fuzz(int f_len){
     /* dry run seeds*/
     fprintf(stderr, "Start Dry Run\n");
     dry_run(out_dir, 2);
-    
+
+    char* grad_file_name;
+
+    if(strcmp(model_type,"NN") == 0)
+      grad_file_name = "./gradient_info_lstm";
+    else
+      grad_file_name = "./gradient_info_nn";
+
     /* start fuzz */
     char buf[16];
     while(1){
         if(read(sock , buf, 5)== -1)
             perror("received failed\n");
 
-        fuzz_lop("./gradient_info", sock);
+        fuzz_lop(grad_file_name, sock, model_type);
         fprintf(stderr, "receive\n");
     }
     return;
@@ -2100,7 +2118,7 @@ void start_fuzz_test(int f_len){
     /* dry run */
     dry_run(out_dir, 2);
     /* fuzz */
-        fuzz_lop("gradient_info", sock);
+        fuzz_lop("gradient_info", sock, "NN");
     return;
 }
 
@@ -2109,7 +2127,7 @@ void main(int argc, char*argv[]){
     int opt;
 
     // function to handle args by looping through each argument provided
-    while ((opt = getopt(argc, argv, "+i:o:p:l:")) > 0)
+    while ((opt = getopt(argc, argv, "+i:o:p:m:l:")) > 0)
 
     switch (opt) {
 
@@ -2126,11 +2144,16 @@ void main(int argc, char*argv[]){
         out_dir = optarg;
         break;
 
-      case 'p': /* output dir */
+      case 'p': /* port */
         sscanf(optarg,"%d",&PORT);
         fprintf(stderr, "Using PORT: %d\n", PORT);
         break;
       
+      case 'm': /* model type  */
+        if (model_type) perror("Multiple -o options not supported");
+        model_type = optarg;
+        break;
+
       case 'l': /* file len */
          sscanf (optarg,"%ld",&len);
          /* change num_index and havoc_blk_* according to file len */
@@ -2169,11 +2192,12 @@ void main(int argc, char*argv[]){
     copy_seeds(in_dir, out_dir, len);
 
     fprintf(stderr, "Run Python module & hit [Enter]...\n");
+    // fprintf(stderr, "%d", strcmp(model_type,"NN"));
     fgetc(stdin);
 
     init_forkserver(argv+optind);
    
-    start_fuzz(len);   
+    start_fuzz(len, model_type);   
     fprintf(stderr, "total execs %ld edge coverage %d.\n", total_execs, count_non_255_bytes(virgin_bits));
     return;
 }
