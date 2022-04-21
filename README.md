@@ -26,7 +26,6 @@ To compile the fuzzer run,
 
 ```
 gcc -funroll-loops ./fuzzer.c -o fuzzer
-
 ```
 
 To run the fuzzing process,

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-lstm_dir="NN_$1_seeds"
-nn_dir="LSTM_$1_seeds"
+lstm_dir="LSTM_$1_seeds"
+nn_dir="NN_$1_seeds"
 
 # Check if program file exists
 if [ ! -f "$1" ]

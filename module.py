@@ -638,7 +638,7 @@ def Gen_Gradient(first, trained, modelType, bitmaps):
     print("Model Ready!")
 
     if modelType == "LSTM":
-        edges = 250
+        edges = 100
     else:
         edges = 250
 
